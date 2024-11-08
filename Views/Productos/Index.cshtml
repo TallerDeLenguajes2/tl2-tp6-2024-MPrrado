@@ -1,0 +1,27 @@
+@{
+    ViewData["Tittle"] = "Lista Productos";
+};
+@using EspacioProductos
+@model List<Producto>
+
+<h2 class="text-center text-success">TABLA PRODUCTOS</h2>
+<table class = "table table-bordered">
+    <thead>
+        <tr>
+            <th>Descripcion</th>
+            <th>Precio</th>
+            <th>Modificar - Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Descripcion</td>
+                <td>$ @p.Precio</td>
+                <td><a type="button" class="btn btn-outline-primary" asp-controller="Productos" asp-action="ModificarProducto" asp-route-idProducto="@p.GetIdProducto()">Modificar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
