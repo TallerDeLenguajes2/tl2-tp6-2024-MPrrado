@@ -1,0 +1,25 @@
+@using EspacioProductos
+@using EspacioRepositorios
+@model Producto
+
+<h1>MODIFICAR PRODCUTO</h1>
+<form asp-action="Index" asp-controller="Productos" method="post">
+    @* @{
+        var productoRepository = new ProductoRepository();
+        produc
+    } *@
+    <input asp-for="@Model.GetIdProducto()">
+    <section>
+        <label asp-for="@Model.Descripcion"></label>
+        <input asp-for="@Model.Descripcion">
+    </section>
+    
+    <section>
+        <label asp-for="@Model.Precio"></label>
+        <input asp-for="@Model.Precio">
+    </section>
+
+    <section>
+        <button type="submit" class="button button-outline-primary">Modificar</button>
+    </section>
+</form>
