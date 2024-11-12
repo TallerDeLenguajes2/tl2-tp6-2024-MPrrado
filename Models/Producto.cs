@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace EspacioProductos
 {
@@ -10,6 +11,7 @@ namespace EspacioProductos
 
         public string Descripcion { get => descripcion; set => descripcion = value; }
         public int Precio { get => precio; set => precio = value; }
+        public int IdProducto { get => idProducto; set => idProducto = value;}
 
         public Producto()
         {
