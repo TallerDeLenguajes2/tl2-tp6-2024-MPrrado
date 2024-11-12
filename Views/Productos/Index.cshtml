@@ -3,11 +3,14 @@
 }
 @using EspacioProductos
 @model List<Producto>
-
+<section class="d-flex justify-content-center my-4">
+    <a class="btn btn-dark" asp-controller="Productos" asp-action="AltaProducto">Alta Producto</a>
+</section>
 <h2 class="text-center text-success">TABLA PRODUCTOS</h2>
 <table class = "table table-bordered">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Descripcion</th>
             <th>Precio</th>
             <th>Modificar - Eliminar</th>
@@ -18,9 +21,13 @@
         @foreach (var p in Model)
         {
             <tr>
+                <td>@p.IdProducto</td>
                 <td>@p.Descripcion</td>
                 <td>$ @p.Precio</td>
-                <td><a type="button" class="btn btn-outline-primary" asp-controller="Productos" asp-action="ModificarProducto" asp-route-idProducto="@p.GetIdProducto()">Modificar</a></td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary" asp-controller="Productos" asp-action="ModificarProducto" asp-route-idProducto="@p.GetIdProducto()">Modificar</a>
+                    <a type="button" class="btn btn-outline-danger" asp-controller="Productos" asp-action="EliminarProducto" asp-route-idProducto="@p.GetIdProducto()" onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">Eliminar</a>
+                </td>
             </tr>
         }
     </tbody>
