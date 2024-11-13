@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.contenedor-detalle-presupuesto 
+{
+  height: 0;
+  overflow: hidden;
+}
+.contenedor-detalle-presupuesto:target
+{
+  height: auto;
+}
