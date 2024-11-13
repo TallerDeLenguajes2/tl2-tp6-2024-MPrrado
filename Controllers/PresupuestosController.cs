@@ -9,8 +9,13 @@ public class PresupuestosController : Controller
         presupuestoRepository = new PresupuestoRepository();
     }
 
-    [HttpGet]
     public IActionResult Index()
+    {
+        return View();
+    }
+    
+    [HttpGet]
+    public IActionResult ListarPresupuestos()
     {
         return View(presupuestoRepository.GetListaPresupuesto());
     }
