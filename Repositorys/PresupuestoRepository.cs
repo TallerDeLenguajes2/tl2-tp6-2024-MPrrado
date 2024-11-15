@@ -21,19 +21,26 @@ namespace EspacioRepositorios
         public void AgregarProductoYCantidad(int idPresupuesto, int idProducto, int cantidad)
         {
            
-            using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
+            try
             {
-                connection.Open();
-                string query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto,Cantidad) VALUES(@idPresupuesto,@idProducto,@Cantidad)";
-                using(SqliteCommand command = new SqliteCommand(query,connection))
+                using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
                 {
-                    command.Parameters.Add(new SqliteParameter("@idPresupuesto",idPresupuesto));
-                    command.Parameters.Add(new SqliteParameter("@idProducto",idProducto));
-                    command.Parameters.Add(new SqliteParameter("@Cantidad",cantidad));
-                    command.ExecuteNonQuery();
+                    connection.Open();
+                    string query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto,Cantidad) VALUES(@idPresupuesto,@idProducto,@Cantidad)";
+                    using(SqliteCommand command = new SqliteCommand(query,connection))
+                    {
+                        command.Parameters.Add(new SqliteParameter("@idPresupuesto",idPresupuesto));
+                        command.Parameters.Add(new SqliteParameter("@idProducto",idProducto));
+                        command.Parameters.Add(new SqliteParameter("@Cantidad",cantidad));
+                        command.ExecuteNonQuery();
+                    }
+                    connection.Close();
                 }
-                connection.Close();
+            }catch(Exception e)
+            {
+                Console.WriteLine("NO SE PUEDE REALIZAR LA OPERACION VERIFICAR ID DE PRESUPUESTOS O DEL PRODUCTO"+e.Message);
             }
+
         }
 
         public void AltaPresupuesto(Presupuesto presupuesto)

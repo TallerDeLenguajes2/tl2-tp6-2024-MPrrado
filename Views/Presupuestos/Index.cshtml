@@ -1,11 +1,83 @@
 <section class="d-flex justify-content-center">
     <nav class="nav">
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-action "><a class="btn btn-secondary"asp-action="ListarPresupuestos" asp-controller="Presupuestos">Listar Presupuestos</a></li>
-            <li class="list-group-item list-group-item-action "><a class="btn btn-secondary"asp-action="ListarPresupuestos" asp-controller="Presupuestos">Alta Presupuesto</a></li>
-            <li class="list-group-item list-group-item-action "><a class="btn btn-secondary"asp-action="ListarPresupuestos" asp-controller="Presupuestos">Modificar Presupuesto</a></li>
-            <li class="list-group-item list-group-item-action "><a class="btn btn-secondary"asp-action="ListarPresupuestos" asp-controller="Presupuestos">Eliminar Presupuesto</a></li>
-            
+        <ul class="">
+            <li class=" list-group-item list-group-item-action bg-danger rounded"><a class="btn fw-bold fs-5 text-white"asp-action="AltaPresupuesto" asp-controller="Presupuestos">Alta Presupuesto</a></li>
         </ul>
     </nav>
 </section>
+@using EspacioProductos
+@model List<Presupuesto>
+<h1 class="text-center">LISTAS PRESUPUESTOS</h1>
+<section class="row justify-content-center">
+    <section class="col-7 ">
+    @{int i = 1;}
+    @foreach( var p in Model)
+    {
+        int totalPresupuesto = 0;
+        @* if(p.Detalle.Count > 0)
+        { *@
+            int k = 1;
+            <section class="border p-3 border-dark my-2 rounded-3">
+                <p hidden>ID: @p.IdPresupuesto</p>
+                <p>Nro Presupuesto: <strong>@i</strong></p>
+                <p>Nombre Destinatario: <strong>@p.NombreDestinatario</strong></p>
+                <section class="d-flex justify-content-center">
+                    <p id="boton-mostrar-@i"><a href="#contenedor-detalles-@i" class="btn btn-success mx-4" onclick="mostrarDetalle(@i)">Mostrar Detalle</a></p>
+                    <p id="boton-cerrar-@i" style="display: none;"><a href="# @i" class="btn btn-danger mx-4" onclick="cerrarDetalle(@i)">Cerrar Detalle</a></p>
+                    <p id="boton-Modificar-@i" ><a class="btn btn-primary mx-4" asp-controller="Presupuestos" asp-action="AgregarProductoYCantidad" asp-route-idPresupuesto="@p.IdPresupuesto">Modificar</a></p>
+                    <p id="boton-Eliminar-@i" ><a class="btn btn-danger mx-4">Eliminar</a></p>
+                </section>
+            </section>
+            <section id="contenedor-detalles-@i" class="contenedor-detalle-presupuesto">
+                <table class="table table-bordered border-dark">
+                    <caption class="caption-top text-center fw-bold">----------------------Listado Productos @p.NombreDestinatario----------------------</caption>
+                    <thead>
+                        <tr>
+                            <th hidden>ID Producto</th>
+                            <th>N°</th>
+                            <th>Nombre Producto</th>
+                            <th>Precio U.</th>
+                            <th>Cantidad</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach(var detalle in p.Detalle)
+                {
+                    <tr>
+                        <td hidden>@detalle.Producto.IdProducto</td>
+                        <td>@k</td>
+                        <td>@detalle.Producto.Descripcion</td>
+                        <td>$@detalle.Producto.Precio</td>
+                        <td>@detalle.Cantidad</td>
+                        <td>$@(detalle.Cantidad * detalle.Producto.Precio)</td>
+                    </tr>
+                    totalPresupuesto += detalle.Cantidad * detalle.Producto.Precio;
+                    k++;
+                }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-end px-3 fw-bold">TOTAL $ @totalPresupuesto</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </section>
+        @* } *@
+        i++;
+    }
+    </section>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script> 
+    function mostrarDetalle(id)
+    { 
+        $("#boton-mostrar-" + id).hide(); 
+        $("#boton-cerrar-" + id).show(); 
+    } 
+    function cerrarDetalle(id)
+    { 
+        $("#boton-mostrar-" + id).show(); 
+        $("#boton-cerrar-" + id).hide();
+    } 
+</script>

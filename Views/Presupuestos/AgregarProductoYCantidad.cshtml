@@ -1,0 +1,18 @@
+@using EspacioProductos
+@model Presupuesto
+@{
+    int idPresupuesto
+}
+<h1>AGREGAR PRODUCTO</h1>
+<form asp-action="Index" asp-controller="Presupuestos" method="post">
+    <section>
+        <label id="numero-producto">Numero Producto</label>
+        <input id="numero-producto">
+    </section>
+    <section>
+        <label id="cantidad">Cantidad</label>
+        <input id="cantidad">
+    </section>
+        <button class="btn" type="submit" asp-controller="Presupuestos" asp-action="AgregarProductoYCantidad"> Modificar</button>
+    </section>
+</form>
