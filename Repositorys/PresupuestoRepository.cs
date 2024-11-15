@@ -61,7 +61,36 @@ namespace EspacioRepositorios
 
         public void EliminarPresupuesto(int idPresupuesto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
+                {
+                    connection.Open();
+                    string query1 = @"DELETE FROM PresupuestosDetalle
+                                        WHERE idPresupuesto IN (
+                                        SELECT idPresupuesto
+                                        FROM Presupuestos
+                                        WHERE idPresupuesto = @idPresupuesto)";
+                    using(SqliteCommand command1 = new SqliteCommand(query1,connection))
+                    {
+                        command1.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+                        command1.ExecuteNonQuery();
+                    }
+                    
+                    string query2 = @"DELETE FROM Presupuestos
+                                    WHERE idPresupuesto = @idPresupuesto";
+                    using(SqliteCommand command2 = new SqliteCommand(query2,connection))
+                    {
+                        command2.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+                        command2.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+            }catch(Exception e)
+            {
+                Console.WriteLine("NO SE PUEDE REALIZAR LA OPERACION VERIFICAR ID DEL PRESUPUESTO"+e.Message);
+            }
         }
 
         public Presupuesto GetDetallePresupuesto(int idPresupuesto)

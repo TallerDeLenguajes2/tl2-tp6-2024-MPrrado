@@ -1,17 +1,16 @@
 @using EspacioProductos
 @model Presupuesto
-@{var date = DateTime.Now.ToString();}
 <h1>ALTA PRESUPUESTO</h1>
-<form asp-action="Index" asp-controller="Presupuestos" method="post">
+<form method="post">
     <section>
         <label asp-for="@Model.NombreDestinatario"></label>
         <input asp-for="@Model.NombreDestinatario">
     </section>
     <section>
         <label id="fecha"</label>
-        <input type="date" value="@date">
+        <input type="date">
     </section>
     <section>
-        <button class="btn" type="button" asp-controller="Presupuestos" asp-action="AltaPresupuesto">Alta Presupuesto</button>
+        <button class="btn" type="submit" asp-action="AltaPresupuesto" asp-controller="Presupuestos">Alta Presupuesto</button>
     </section>
 </form>

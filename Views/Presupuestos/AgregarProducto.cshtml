@@ -1,0 +1,28 @@
+@using EspacioProductos
+@model List<Producto>
+
+<h1>AGREGAR PRODUCTOS</h1>
+ <table class = "table table-bordered">
+    <thead>
+        <tr>
+            <th hidden >ID</th>
+            <th>Descripcion</th>
+            <th>Precio</th>
+            <th>Modificar - Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td hidden>@p.IdProducto</td>
+                <td>@p.Descripcion</td>
+                <td>$ @p.Precio</td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary" asp-controller="Presupuestos" asp-action="AgregarCantidad" asp-route-idPresupuesto="@ViewBag.IdPresupuesto" asp-route-IdProducto="@p.IdProducto">Agregar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>   

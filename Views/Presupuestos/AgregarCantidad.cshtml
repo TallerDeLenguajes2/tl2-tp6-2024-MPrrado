@@ -1,0 +1,17 @@
+
+<h3>Cantidad Producto:  @ViewBag.NombreProducto</h3>
+<form class="form col-3 " method="post" asp-controller="Presupuestos" asp-action="AgregarProductoYCantidad">
+    <section >
+        <input hidden name="idPresupuesto" value="@ViewBag.IdPresupuesto">
+        <input hidden name="idProducto" value="@ViewBag.IdProducto">
+    </section>
+    <section class="form-group">
+        <label for="cantidad" class="fw-bold">Cantidad:</label>
+        <input id="cantidad" name="cantidad" class="form-control">
+    </section>
+    
+    <section class="form-group">
+        <button type="submit" class="btn btn-success my-3" >Agregar</button>
+    </section>
+
+</form>
