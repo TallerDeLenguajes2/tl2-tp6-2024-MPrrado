@@ -1,16 +1,16 @@
 @using EspacioProductos
 @model Presupuesto
 <h1>ALTA PRESUPUESTO</h1>
-<form method="post">
-    <section>
-        <label asp-for="@Model.NombreDestinatario"></label>
-        <input asp-for="@Model.NombreDestinatario">
+<form method="post" class="form col-3">
+    <section class="my-4 form-group">
+        <label asp-for="@Model.NombreDestinatario">Nombre Destinatario: </label>
+        <input asp-for="@Model.NombreDestinatario" class="form-control">
     </section>
-    <section>
-        <label id="fecha"</label>
-        <input type="date">
+    <section class="form-group">
+        <label id="fecha">Fecha Alta:</label>
+        <input type="date" class="form-control">
     </section>
-    <section>
-        <button class="btn" type="submit" asp-action="AltaPresupuesto" asp-controller="Presupuestos">Alta Presupuesto</button>
+    <section class="form-group">
+        <button type="submit" asp-action="AltaPresupuesto" asp-controller="Presupuestos" class="btn btn-success my-3">Alta Presupuesto</button>
     </section>
 </form>

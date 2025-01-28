@@ -14,15 +14,15 @@
     @foreach( var p in Model)
     {
         int totalPresupuesto = 0;
-        if(p.Detalle.Count > 0)
-        {
+        @* if(p.Detalle.Count > 0)
+        { *@
             int k = 1;
             <section class="border p-3 border-dark my-2 rounded-3">
                 <p hidden>ID: @p.IdPresupuesto</p>
                 <p>Nro Presupuesto: <strong>@i</strong></p>
                 <p>Nombre Destinatario: <strong>@p.NombreDestinatario</strong></p>
                 <section class="d-flex justify-content-center">
-                    <p id="boton-mostrar-@i"><a href="#contenedor-detalles-@i" class="btn btn-success mx-4" onclick="mostrarDetalle(@i)">Mostrar Detalle</a></p>
+                    <p id="boton-mostrar-@i"><a href="#contenedor-detalles-@i" class="btn btn-success mx-4" onclick="mostrarDetalle(@i, @Model.Count())">Mostrar Detalle</a></p>
                     <p id="boton-cerrar-@i" style="display: none;"><a href="# @i" class="btn btn-danger mx-4" onclick="cerrarDetalle(@i)">Cerrar Detalle</a></p>
                     <p id="boton-Modificar-@i" ><a class="btn btn-primary mx-4" asp-controller="Presupuestos" asp-action="AgregarProducto" asp-route-idPresupuesto="@p.IdPresupuesto">Modificar</a></p>
                     <p id="boton-Eliminar-@i" ><a class="btn btn-danger mx-4" asp-controller="Presupuestos" asp-action="EliminarPresupuestoConfirmar" asp-route-idPresupuesto="@p.IdPresupuesto">Eliminar</a></p>
@@ -63,17 +63,25 @@
                     </tfoot>
                 </table>
             </section>
-        }
+        @* } *@
         i++;
     }
     </section>
 </section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script> 
-    function mostrarDetalle(id)
+    function mostrarDetalle(id, cantidad)
     { 
         $("#boton-mostrar-" + id).hide(); 
-        $("#boton-cerrar-" + id).show(); 
+        $("#boton-cerrar-" + id).show();
+        for(i=1; i<=cantidad; i++)
+        {
+            if(i != id)
+            {
+                $("#boton-cerrar-" + i).hide();
+                $("#boton-mostrar-" + i).show(); 
+            }
+        } 
     } 
     function cerrarDetalle(id)
     { 
