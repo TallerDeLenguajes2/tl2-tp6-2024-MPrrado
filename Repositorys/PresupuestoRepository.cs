@@ -26,7 +26,7 @@ namespace EspacioRepositorios
                 using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
                 {
                     connection.Open();
-                    string query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto,Cantidad) VALUES(@idPresupuesto,@idProducto,@Cantidad)";
+                    string query = "INSERT INTO presupuesto_detalle (idPresupuesto, idProducto,Cantidad) VALUES(@idPresupuesto,@idProducto,@Cantidad)";
                     using(SqliteCommand command = new SqliteCommand(query,connection))
                     {
                         command.Parameters.Add(new SqliteParameter("@idPresupuesto",idPresupuesto));
@@ -48,7 +48,7 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = @"INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) VALUES(@NombreDestinatario, @FechaCreacion)";
+                string query = @"INSERT INTO presupuesto (NombreDestinatario, FechaCreacion) VALUES(@NombreDestinatario, @FechaCreacion)";
                 using(SqliteCommand command = new SqliteCommand(query,connection))
                 {
                     command.Parameters.AddWithValue("@NombreDestinatario", presupuesto.NombreDestinatario);
@@ -66,10 +66,10 @@ namespace EspacioRepositorios
                 using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
                 {
                     connection.Open();
-                    string query1 = @"DELETE FROM PresupuestosDetalle
+                    string query1 = @"DELETE FROM presupuesto_detalle
                                         WHERE idPresupuesto IN (
                                         SELECT idPresupuesto
-                                        FROM Presupuestos
+                                        FROM presupuesto
                                         WHERE idPresupuesto = @idPresupuesto)";
                     using(SqliteCommand command1 = new SqliteCommand(query1,connection))
                     {
@@ -77,7 +77,7 @@ namespace EspacioRepositorios
                         command1.ExecuteNonQuery();
                     }
                     
-                    string query2 = @"DELETE FROM Presupuestos
+                    string query2 = @"DELETE FROM presupuesto
                                     WHERE idPresupuesto = @idPresupuesto";
                     using(SqliteCommand command2 = new SqliteCommand(query2,connection))
                     {
@@ -103,8 +103,8 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = @"SELECT idPresupuesto, NombreDestinatario, idProducto, Cantidad FROM Presupuestos P
-                        INNER JOIN PresupuestosDetalle PD USING(idPresupuesto)
+                string query = @"SELECT idPresupuesto, NombreDestinatario, idProducto, Cantidad FROM presupuesto P
+                        INNER JOIN presupuesto_detalle PD USING(idPresupuesto)
                         WHERE P.idPresupuesto = @idPresupuesto;";
                 using(SqliteCommand command = new SqliteCommand(query, connection))
                 {
@@ -135,7 +135,7 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = "SELECT idPresupuesto, NombreDestinatario FROM Presupuestos";
+                string query = "SELECT idPresupuesto, NombreDestinatario FROM presupuesto";
                 using(SqliteCommand command = new SqliteCommand(query,connection))
                 {
                     using(SqliteDataReader reader1 = command.ExecuteReader())
@@ -146,8 +146,8 @@ namespace EspacioRepositorios
                             string nombreDestinatario = reader1.GetString(1);
                             List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
                             //Todo lo necesario para obtener los productos de un PresupuestoDetalle dado un idPresupuesto
-                            string queryDetalles = @"SELECT idProducto,Descripcion,Precio,Cantidad FROM PresupuestosDetalle
-                            INNER JOIN Productos USING(idProducto)
+                            string queryDetalles = @"SELECT idProducto,Descripcion,Precio,Cantidad FROM presupuesto_detalle
+                            INNER JOIN producto USING(idProducto)
                             WHERE idPresupuesto=@idPresupuesto";
                             var commandDetalles = new SqliteCommand(queryDetalles,connection);
                             commandDetalles.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);

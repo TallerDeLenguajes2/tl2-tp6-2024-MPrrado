@@ -18,7 +18,7 @@ namespace EspacioRepositorios
         {
             if (producto != null)
             {
-                string query = @"INSERT INTO Productos (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
+                string query = @"INSERT INTO producto (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
                 using (SqliteConnection connection = new SqliteConnection(cadenaDeConexion))
                 {
                     connection.Open();
@@ -35,7 +35,7 @@ namespace EspacioRepositorios
 
         public void EliminarProducto(int idProducto)
         {
-            string query1 = @"DELETE FROM Productos
+            string query1 = @"DELETE FROM producto
                             WHERE idProducto = @idProducto";
             string query2 = @"DELETE FROM PresupuestosDetalle
                             WHERE idProducto = @idProducto";
@@ -62,7 +62,7 @@ namespace EspacioRepositorios
 
         public Producto GetProducto(int idProducto)
         {
-           string query = @"SELECT * FROM Productos WHERE idProducto = @idProducto";
+           string query = @"SELECT * FROM producto WHERE idProducto = @idProducto";
            Producto producto = new Producto();
            using(SqliteConnection connection = new SqliteConnection(cadenaDeConexion))
            {
@@ -90,7 +90,7 @@ namespace EspacioRepositorios
         public List<Producto> GetListaProductos()
         {
             List<Producto> listaProductos = new List<Producto>();
-            string query = @"SELECT idProducto, Descripcion, Precio FROM Productos";
+            string query = @"SELECT idProducto, Descripcion, Precio FROM producto";
             using (SqliteConnection connection = new SqliteConnection(cadenaDeConexion))
             {
                 connection.Open();
@@ -111,7 +111,7 @@ namespace EspacioRepositorios
 
         public void ModificarProducto(int idProducto, Producto productoModificado)
         {
-            string query = @"UPDATE Productos SET Descripcion = @Descripcion, Precio = @Precio WHERE idProducto = @idProducto";
+            string query = @"UPDATE producto SET Descripcion = @Descripcion, Precio = @Precio WHERE idProducto = @idProducto";
             using (SqliteConnection connection = new SqliteConnection(cadenaDeConexion))
                 {
                     connection.Open();
