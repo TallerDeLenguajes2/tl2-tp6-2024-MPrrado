@@ -20,7 +20,7 @@
             <section class="border p-3 border-dark my-2 rounded-3">
                 <p hidden>ID: @p.IdPresupuesto</p>
                 <p>Nro Presupuesto: <strong>@i</strong></p>
-                <p>Nombre Destinatario: <strong>@p.NombreDestinatario</strong></p>
+                <p>Nombre Destinatario: <strong>@p.Cliente.Nombre</strong></p>
                 <section class="d-flex justify-content-center">
                     <p id="boton-mostrar-@i"><a href="#contenedor-detalles-@i" class="btn btn-success mx-4" onclick="mostrarDetalle(@i, @Model.Count())">Mostrar Detalle</a></p>
                     <p id="boton-cerrar-@i" style="display: none;"><a href="# @i" class="btn btn-danger mx-4" onclick="cerrarDetalle(@i)">Cerrar Detalle</a></p>
@@ -30,7 +30,7 @@
             </section>
             <section id="contenedor-detalles-@i" class="contenedor-detalle-presupuesto">
                 <table class="table table-bordered border-dark">
-                    <caption class="caption-top text-center fw-bold">----------------------Listado Productos @p.NombreDestinatario----------------------</caption>
+                    <caption class="caption-top text-center fw-bold">----------------------Listado Productos @p.Cliente.Nombre----------------------</caption>
                     <thead>
                         <tr>
                             <th hidden>ID Producto</th>
