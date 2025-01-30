@@ -43,9 +43,15 @@ public class ClienteController : Controller
     }
 
     [HttpPost]
-    public IActionResult ModificarCliente(int idCliente, Cliente clienteModifcado)
+    public IActionResult ModificarCliente(Cliente clienteModificado)
     {
-        repositorioCliente.ModificarCliente(idCliente,clienteModifcado);
+        repositorioCliente.ModificarCliente(clienteModificado);
+        return RedirectToAction("Index");
+    }
+
+    public IActionResult EliminarCliente(int idCliente)
+    {
+        repositorioCliente.EliminarCliente(idCliente);
         return RedirectToAction("Index");
     }
 

@@ -8,7 +8,7 @@ namespace EspacioRepositorios
     {
         public void AltaCliente(Cliente cliente);
         public List<Cliente> GetListaCliente();
-        public void ModificarCliente(int idCliente, Cliente clienteModificado);
+        public void ModificarCliente(Cliente clienteModificado);
         public void EliminarCliente(int idCliente);
     }
     public class ClienteRepository : IClienteRepository
@@ -67,35 +67,27 @@ namespace EspacioRepositorios
         {
             try
             {
-                string query1 = @"DELETE FROM presupuesto
+                string query = @"DELETE FROM cliente
                                 WHERE id_cliente = @id_cliente";
-                string query2 = @"DELETE FROM cliente
-                                WHERE  id_cliente = @id_cliente";
 
                 using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
                 {
                     connection.Open();
-                    using(SqliteCommand command1 = new SqliteCommand(query1,connection))
+                    using(SqliteCommand command2 = new SqliteCommand(query,connection))
                     {
-                        command1.Parameters.Add(new SqliteParameter("@idProducto", idCliente));
-                        command1.ExecuteNonQuery();
-                    }
-                    
-                    using(SqliteCommand command2 = new SqliteCommand(query2,connection))
-                    {
-                        command2.Parameters.Add(new SqliteParameter("@idProducto", idCliente));
+                        command2.Parameters.Add(new SqliteParameter("@id_cliente", idCliente));
                         command2.ExecuteNonQuery();
                     }
                     connection.Close();
                 }
             }catch(Exception e)
             {
-                throw new ("ERROR NO SE PUDO ELIMINAR");
+                throw new Exception("ERROR NO SE PUDO ELIMINAR EL CLIENTE");
             }
         }
 
 
-        public void ModificarCliente(int idCliente, Cliente clienteModificado)
+        public void ModificarCliente(Cliente clienteModificado)
         {
             try
             {
@@ -106,7 +98,7 @@ namespace EspacioRepositorios
                     connection.Open();
                     using(SqliteCommand command = new SqliteCommand(query, connection))
                     {
-                        command.Parameters.Add(new SqliteParameter("@id_cliente", idCliente));
+                        command.Parameters.Add(new SqliteParameter("@id_cliente", clienteModificado.ClienteId));
                         command.Parameters.Add(new SqliteParameter("@nombre", clienteModificado.Nombre));
                         command.Parameters.Add(new SqliteParameter("@email", clienteModificado.Email));
                         command.Parameters.Add(new SqliteParameter("@telefono", clienteModificado.Telefono));
