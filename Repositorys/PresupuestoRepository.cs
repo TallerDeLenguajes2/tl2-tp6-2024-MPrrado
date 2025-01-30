@@ -1,4 +1,5 @@
 using System.Net.Quic;
+using EspacioClientes;
 using EspacioProductos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -38,7 +39,7 @@ namespace EspacioRepositorios
                 }
             }catch(Exception e)
             {
-                Console.WriteLine("NO SE PUEDE REALIZAR LA OPERACION VERIFICAR ID DE PRESUPUESTOS O DEL PRODUCTO"+e.Message);
+                Console.WriteLine("NO SE PUEDE REALIZAR LA OPERACION VERIFICAR ID DE PRESUPUESTOS O DEL PRODUCTO");
             }
 
         }
@@ -48,10 +49,10 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = @"INSERT INTO presupuesto (NombreDestinatario, FechaCreacion) VALUES(@NombreDestinatario, @FechaCreacion)";
+                string query = @"INSERT INTO presupuesto (FechaCreacion,id_cliente) VALUES(@FechaCreacion, @id_cliente)";
                 using(SqliteCommand command = new SqliteCommand(query,connection))
                 {
-                    command.Parameters.AddWithValue("@NombreDestinatario", presupuesto.NombreDestinatario);
+                    command.Parameters.AddWithValue("@id_cliente", presupuesto.Cliente.ClienteId);
                     command.Parameters.AddWithValue("@FechaCreacion", DateTime.Now.ToString("yyyy-MM-dd"));
                     command.ExecuteNonQuery();
                 }
@@ -97,34 +98,62 @@ namespace EspacioRepositorios
         {
             ProductoRepository productoRepositoryConsulta = new ProductoRepository();
             int idPresupuestoConsulta = 0;
-            string nombreDestinatarioConsulta = "";
+            Cliente clienteConsulta;
+            int id_cliente = 9999999;
+            string nombreClienteConsulta="";
+            string emailClienteConsulta="";
+            string telefonoClienteConsulta="";
 
             List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = @"SELECT idPresupuesto, NombreDestinatario, idProducto, Cantidad FROM presupuesto P
+                string query1 = @"SELECT idPresupuesto,idProducto, Cantidad FROM presupuesto P
                         INNER JOIN presupuesto_detalle PD USING(idPresupuesto)
+                        INNER JOIN cliente C USING(id_cliente)
                         WHERE P.idPresupuesto = @idPresupuesto;";
-                using(SqliteCommand command = new SqliteCommand(query, connection))
+                string query2 = @"SELECT id_cliente,nombre,email,telefono FROM cliente 
+                                INNER JOIN presupuesto USING (id_cliente)
+                                WHERE idPresupuesto = @idPresupuesto";
+
+                using(SqliteCommand command1 = new SqliteCommand(query1, connection))
                 {
-                    command.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);
-                    using(SqliteDataReader reader = command.ExecuteReader())
+                    command1.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);
+                    using(SqliteDataReader reader = command1.ExecuteReader())
                     {
                         while(reader.Read())
                         {
                             idPresupuestoConsulta = reader.GetInt32(0);
-                            nombreDestinatarioConsulta = reader.GetString(1);
-                            var productoPresupuesto = productoRepositoryConsulta.GetProducto(reader.GetInt32(2));
-                            int cantidadConsulta = reader.GetInt32(3);
+                            var productoPresupuesto = productoRepositoryConsulta.GetProducto(reader.GetInt32(1));
+                            int cantidadConsulta = reader.GetInt32(2);
                             detalles.Add(new(productoPresupuesto, cantidadConsulta));
                         }
                     }
                 }
+
+                using(SqliteCommand command2 = new SqliteCommand(query2, connection))
+                {
+                    using(SqliteDataReader reader = command2.ExecuteReader())
+                    {
+                        command2.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);
+                        if(reader.Read())
+                        {
+                            id_cliente = reader.GetInt32(0);
+                            nombreClienteConsulta = reader.GetString(1);
+                            emailClienteConsulta = reader.GetString(2);
+                            telefonoClienteConsulta = reader.GetString(3);
+                            clienteConsulta = new(id_cliente, nombreClienteConsulta, emailClienteConsulta,telefonoClienteConsulta);
+                        }else //si no encontro cliente con presupuesto de tal id entonces crea un objeto cliente nulo para poder continuar con la ejecucion
+                        {
+                            clienteConsulta = null;
+                        }
+                    }
+                }
+
                 connection.Close();
 
             }
-            Presupuesto presupuesto = new Presupuesto(idPresupuestoConsulta, nombreDestinatarioConsulta, detalles);
+            Presupuesto presupuesto = new Presupuesto(idPresupuestoConsulta, clienteConsulta, detalles);
             return presupuesto;
         }
 
@@ -135,7 +164,8 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = "SELECT idPresupuesto, NombreDestinatario FROM presupuesto";
+                string query = @"SELECT idPresupuesto, FechaCreacion, id_cliente, nombre, email, telefono FROM presupuesto 
+                                INNER JOIN cliente USING (id_cliente)";
                 using(SqliteCommand command = new SqliteCommand(query,connection))
                 {
                     using(SqliteDataReader reader1 = command.ExecuteReader())
@@ -143,9 +173,14 @@ namespace EspacioRepositorios
                         while(reader1.Read())
                         {
                             int idPresupuesto = reader1.GetInt32(0);
-                            string nombreDestinatario = reader1.GetString(1);
-                            List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
+                            string fechaCreacion = reader1.GetString(1);
+                            int idCliente = reader1.GetInt32(2);
+                            string nombreDestinatario = reader1.GetString(3);
+                            string emailCliente = reader1.GetString(4);
+                            string telefonoCliente = reader1.GetString(5);                            
+
                             //Todo lo necesario para obtener los productos de un PresupuestoDetalle dado un idPresupuesto
+                            List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
                             string queryDetalles = @"SELECT idProducto,Descripcion,Precio,Cantidad FROM presupuesto_detalle
                             INNER JOIN producto USING(idProducto)
                             WHERE idPresupuesto=@idPresupuesto";
@@ -159,7 +194,8 @@ namespace EspacioRepositorios
                                     detalles.Add(new(productoDetalle,reader2.GetInt32(3)));
                                 }   
                             }
-                            listaPresupuesto.Add(new(idPresupuesto,nombreDestinatario,detalles));
+                            Cliente clienteConsulta = new(idCliente, nombreDestinatario, emailCliente, telefonoCliente);
+                            listaPresupuesto.Add(new(idPresupuesto,clienteConsulta,detalles));
                         }
 
                     }

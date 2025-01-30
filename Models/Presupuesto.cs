@@ -1,22 +1,24 @@
+using EspacioClientes;
+
 namespace EspacioProductos
 {
     public class Presupuesto
     {
         private int idPresupuesto;
-        private string nombreDestinatario;
+        private Cliente cliente;
         private List<PresupuestoDetalle> detalle;
         public List<PresupuestoDetalle> Detalle { get => detalle;}
-        public string NombreDestinatario { get => nombreDestinatario; set => nombreDestinatario = value; }
         public int IdPresupuesto { get => idPresupuesto;}
+        public Cliente Cliente { get => cliente;}
 
         public Presupuesto()
         {
             detalle = new List<PresupuestoDetalle>();
         }
-        public Presupuesto(int idPresupuesto, string nombreDestinatario, List<PresupuestoDetalle> detalles)
+        public Presupuesto(int idPresupuesto,  Cliente cliente, List<PresupuestoDetalle> detalles)
         {
             this.idPresupuesto = idPresupuesto;
-            this.nombreDestinatario = nombreDestinatario;
+            this.cliente = cliente;
             detalle = detalles;
         }
 

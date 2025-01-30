@@ -41,7 +41,7 @@ public class ProductosController : Controller
         return RedirectToAction("Index");
     }
 
-    // [HttpDelete] porque no puedo dejar este atributo, si lo pongo me sale error  405
+    [HttpGet] // porque no puedo dejar este atributo, si lo pongo me sale error  405
     public IActionResult EliminarProducto(int idProducto)
     {
         productoRepository.EliminarProducto(idProducto);

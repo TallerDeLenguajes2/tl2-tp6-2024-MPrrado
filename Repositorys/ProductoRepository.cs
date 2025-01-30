@@ -37,26 +37,24 @@ namespace EspacioRepositorios
         {
             string query1 = @"DELETE FROM producto
                             WHERE idProducto = @idProducto";
-            string query2 = @"DELETE FROM PresupuestosDetalle
+            string query2 = @"DELETE FROM presupuesto_detalle
                             WHERE idProducto = @idProducto";
 
             using(SqliteConnection connection = new SqliteConnection(cadenaDeConexion))
             {
+                connection.Open();
                 using(SqliteCommand command2 = new SqliteCommand(query2,connection))
                 {
                     command2.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
-                    connection.Open();
                     command2.ExecuteNonQuery();
-                    connection.Close();
                 }
                 
                 using(SqliteCommand command1 = new SqliteCommand(query1,connection))
                 {
                     command1.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
-                    connection.Open();
                     command1.ExecuteNonQuery();
-                    connection.Close();
                 }
+                connection.Close();
             }
         }
 

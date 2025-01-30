@@ -1,3 +1,5 @@
+using System.Net.Mail;
+using EspacioClientes;
 using EspacioProductos;
 using EspacioRepositorios;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +28,11 @@ public class PresupuestosController : Controller
     }
 
     [HttpPost]
-    public IActionResult AltaPresupuesto(Presupuesto presupuesto)
+    public IActionResult AltaPresupuesto(string nombre, string email, string telefono)
     {
-        presupuestoRepository.AltaPresupuesto(presupuesto);
+        Cliente clienteAlta = new (0, nombre, email, telefono);
+        Presupuesto presupuestoAlta = new (0,clienteAlta,null);
+        presupuestoRepository.AltaPresupuesto(presupuestoAlta);
         return RedirectToAction("Index");
     }
 
