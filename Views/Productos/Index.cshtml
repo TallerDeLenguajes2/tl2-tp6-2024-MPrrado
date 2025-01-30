@@ -10,7 +10,7 @@
 <table class = "table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
+            <th hidden>ID</th>
             <th>Descripcion</th>
             <th>Precio</th>
             <th>Modificar - Eliminar</th>
@@ -21,7 +21,7 @@
         @foreach (var p in Model)
         {
             <tr>
-                <td>@p.IdProducto</td>
+                <td hidden>@p.IdProducto</td>
                 <td>@p.Descripcion</td>
                 <td>$ @p.Precio</td>
                 <td>

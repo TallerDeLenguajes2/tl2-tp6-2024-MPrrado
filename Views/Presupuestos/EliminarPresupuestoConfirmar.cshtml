@@ -1,7 +1,7 @@
 @using EspacioProductos
 @model Presupuesto
 <section class="row justify-content-center">
-    <h2>SEGURO DESEA ELIMINAR EL PRESUPUESTO DE : @Model.NombreDestinatario</h2>
+    <h2>SEGURO DESEA ELIMINAR EL PRESUPUESTO DE : @Model.Cliente.Nombre</h2>
     <section class="d-flex justify-content-center">
         <a asp-controller="Presupuestos" class="btn mx-2 btn-danger"a asp-action="EliminarPresupuestoDefinitivo" asp-route-idPresupuesto="@Model.IdPresupuesto">CONFIRMAR</a>
         <a asp-controller="Presupuestos" class="btn mx-2 btn-primary"a asp-action="Index">CANCELAR</a>
