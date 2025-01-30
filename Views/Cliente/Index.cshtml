@@ -1,0 +1,36 @@
+@{
+    ViewData["Tittle"] = "Lista Cliente";
+}
+@using EspacioClientes
+@model List<Cliente>
+<section class="d-flex justify-content-center my-4">
+    <a class="btn btn-dark" asp-controller="Cliente" asp-action="AltaCliente">Alta Cliente</a>
+</section>
+<h2 class="text-center text-success">LISTADO CLIENTES</h2>
+<table class = "table table-bordered">
+    <thead>
+        <tr>
+            <th hidden>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Telefono</th>
+            <th>Modificar - Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td hidden>@p.ClienteId</td>
+                <td>@p.Nombre</td>
+                <td>@p.Email</td>
+                <td>@p.Telefono</td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary" asp-controller="Cliente" asp-action="ModificarCliente" asp-route-idCliente="@p.ClienteId">Modificar</a>
+                    <a type="button" class="btn btn-outline-danger" asp-controller="Cliente" asp-action="EliminarCliente" asp-route-idCliente="@p.ClienteId" onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
