@@ -35,37 +35,44 @@ public class PresupuestosController : Controller
     public IActionResult AltaPresupuesto(int idCliente)
     {
         Cliente clienteAlta = clienteRepository.GetListaCliente().Find(c => c.ClienteId == idCliente);
-        return RedirectToAction("AgregarProducto", clienteAlta);
+        var idNuevoPresupuesto = presupuestoRepository.GetListaPresupuesto().Max(p=>p.IdPresupuesto)+1;
+        Presupuesto presupuestoCreado = new (idNuevoPresupuesto,clienteAlta,null);
+        presupuestoRepository.AltaPresupuesto(presupuestoCreado);
+        return RedirectToAction("AgregarProducto", new{idPresupuesto = idNuevoPresupuesto});
     }
 
     [HttpGet]
-    public IActionResult AgregarProducto(Cliente Cliente)
+    public IActionResult AgregarProducto(int idPresupuesto)
     {
-
-        return View(); 
-    }
-
-    [HttpGet]
-    public IActionResult AgregarCantidad(int idPresupuesto, int idProducto)
-    {
-        ViewBag.IdProducto = idProducto;
-        ViewBag.IdPresupuesto = idPresupuesto;
-        ViewBag.NombreProducto = productoRepository.GetListaProductos().Find(p => p.IdProducto == idProducto).Descripcion;
-        return View(); 
+        var model = new ProductoViewModel(productoRepository.GetListaProductos(),idPresupuesto);
+        return View(model); 
     }
 
     [HttpPost]
-    public IActionResult AgregarProductoYCantidad(int idPresupuesto, int idProducto, int cantidad)
+    public IActionResult AgregarProductoYCantidad(List<ProductoSeleccionadoViewModel>listadoProductos, int IdPresupuesto)
     {
-        if(presupuestoRepository.GetListaPresupuesto().Find(p => p.IdPresupuesto == idPresupuesto) != null && productoRepository.GetProducto(idProducto)!= null)
+        if(listadoProductos == null || listadoProductos.Count()==0) //controlamos que no llegue vacia la eleccion de productos para el presupuesto
         {
-            presupuestoRepository.AgregarProductoYCantidad(idPresupuesto, idProducto,cantidad);
-            return RedirectToAction("Index");
+            return RedirectToAction("AgregarProducto", new{idPresupuesto = IdPresupuesto});
         }else
         {
-            return RedirectToAction("AgregarCantidad");
+            foreach(var p in listadoProductos)
+            {
+                if(p.Seleccionado)
+                {
+                    presupuestoRepository.AgregarProductoYCantidad(IdPresupuesto, p.IdProducto, p.Cantidad);
+                }
+            }
+            return RedirectToAction("Index");
         }
     }
+
+    // [HttpPost]
+    // public IActionResult AgregarProductoYCantidad(List<int>idProductos, List<int> cantidadProductos)
+    // {
+
+    //         return RedirectToAction("Index");
+    // }
 
     [HttpGet]
     public IActionResult EliminarPresupuestoConfirmar(int idPresupuesto)
