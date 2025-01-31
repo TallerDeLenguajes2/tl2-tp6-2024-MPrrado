@@ -2,27 +2,45 @@
 @model ProductoViewModel
 
 <h1>AGREGAR PRODUCTOS</h1>
- <table class = "table table-bordered">
-    <thead>
-        <tr>
-            <th hidden >ID</th>
-            <th>Descripcion</th>
-            <th>Precio</th>
-            <th>Modificar - Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-        @foreach (var p in Model.ListadoProducto)
-        {
+<form class="form" method="post" asp-controller="Presupuestos" asp-action="AgregarProductoYCantidad">
+    <section>
+        <input asp-for="@Model.IdPresupuesto">
+    </section>
+    <table class = "table table-bordered">
+        <thead>
             <tr>
-                <td hidden>@p.IdProducto</td>
-                <td>@p.Descripcion</td>
-                <td>$ @p.Precio</td>
-                <td>
-                    <a type="button" class="btn btn-outline-primary" asp-controller="Presupuestos" asp-action="AgregarCantidad" asp-route-idPresupuesto="@ViewBag.IdPresupuesto" asp-route-IdProducto="@p.IdProducto">Agregar</a>
-                </td>
+                <th hidden >ID</th>
+                <th>Descripcion</th>
+                <th>Precio</th>
+                <th>Modificar - Eliminar</th>
             </tr>
-        }
-    </tbody>
-</table>   
+        </thead>
+        <tbody>
+            @{var i = 0;}
+            @foreach (var p in Model.ListadoProducto)
+            {
+                <tr>
+                    <td hidden>@p.IdProducto</td>
+                    <td>@p.Descripcion</td>
+                    <td>$ @p.Precio</td>
+                    <td>
+                        <section class="d-flex">
+                            <input type="checkbox" name="listadoProductos[@i].Seleccionado" value="true" class="idProductos">
+                            @* Checkbox para poder seleccionar el producto a llevar y solamente mandar ese por la lista del viewmodel *@
+                            <input hidden type="checkbox" name="listadoProductos[@i].IdProducto" value="@p.IdProducto" class="idProductos" checked>
+                            @* input para la cantidad que solo se activa si previamente se selecciona el checkbox correspondiente *@
+                            <section class="mx-2 contenedor-input-cantidad">
+                                <label for="listadoProductos[@i].Cantidad">Cantidad:</label>
+                                <input type="number" name="listadoProductos[@i].Cantidad" id="listadoProductos[@i].Cantidad" min="1">
+                            </section>
+                        </section>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+    <section>
+        <button type="submit" asp-action="AgregarProductoYCantidad" asp-controller="Presupuestos" class="btn btn-success my-3">Alta Presupuesto</button>
+    </section>
+</form> 
