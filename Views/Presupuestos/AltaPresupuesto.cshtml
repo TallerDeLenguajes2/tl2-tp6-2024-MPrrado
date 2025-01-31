@@ -1,12 +1,19 @@
-@using EspacioProductos
-@model Presupuesto
+@using EspacioViewModels
+@model PresupuestoViewModel
 <h1 class="text-center">ALTA PRESUPUESTO</h1>
 <section class="d-flex justify-content-center">
     <form method="post" class="form col-3">
     <section class="my-4 form-group">
-        <label aria-required="true" class="fw-bold" asp-for="@Model.Cliente.Nombre">Nombre Destinatario: </label>
-        <select asp-for="@Model.Cliente.Nombre">
-            <form action=""></form>
+        <label aria-required="true" class="fw-bold" >Nombre Destinatario: </label>
+        <select class="form-select" name="idCliente">
+            @{
+                foreach(var c in @Model.ListadoCliente)
+                {
+                    <option value="@c.ClienteId">
+                        @c.Nombre - @c.Telefono
+                    </option>
+                }
+            }
         </select>
     </section>
     <section class="form-group d-flex justify-content-center">

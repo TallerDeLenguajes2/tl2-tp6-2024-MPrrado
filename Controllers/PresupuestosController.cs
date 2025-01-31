@@ -2,14 +2,17 @@ using System.Net.Mail;
 using EspacioClientes;
 using EspacioProductos;
 using EspacioRepositorios;
+using EspacioViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 public class PresupuestosController : Controller
 {
     private PresupuestoRepository presupuestoRepository;
     private ProductoRepository productoRepository;
+    private ClienteRepository clienteRepository;
     public PresupuestosController()
     {
+        clienteRepository = new ClienteRepository();     
         productoRepository = new ProductoRepository();
         presupuestoRepository = new PresupuestoRepository();
     }
@@ -24,33 +27,22 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult AltaPresupuesto()
     {
-        return View();
+        var model = new PresupuestoViewModel(clienteRepository.GetListaCliente());
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult AltaPresupuesto(string nombre, string email, string telefono)
+    public IActionResult AltaPresupuesto(int idCliente)
     {
-        Cliente clienteAlta = new (0, nombre, email, telefono);
-        Presupuesto presupuestoAlta = new (0,clienteAlta,null);
-        presupuestoRepository.AltaPresupuesto(presupuestoAlta);
-        return RedirectToAction("Index");
+        Cliente clienteAlta = clienteRepository.GetListaCliente().Find(c => c.ClienteId == idCliente);
+        return RedirectToAction("AgregarProducto", clienteAlta);
     }
 
     [HttpGet]
-    public IActionResult AgregarProducto(int idPresupuesto)
+    public IActionResult AgregarProducto(Cliente Cliente)
     {
-        ViewBag.IdPresupuesto = idPresupuesto;
-        var p = presupuestoRepository.GetListaPresupuesto().Find(p => p.IdPresupuesto == idPresupuesto);
-        var listaDetalle = p.Detalle;
-        var listaProductos = productoRepository.GetListaProductos();
-        foreach(var detalle in listaDetalle)
-        {
-            if(listaProductos.Find(p => p.IdProducto == detalle.Producto.IdProducto) != null)
-            {
-                listaProductos.Remove(listaProductos.Find(p => p.IdProducto == detalle.Producto.IdProducto));
-            }
-        }
-        return View(listaProductos); 
+
+        return View(); 
     }
 
     [HttpGet]

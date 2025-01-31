@@ -1,5 +1,5 @@
-@using EspacioProductos
-@model List<Producto>
+@using EspacioViewModels
+@model ProductoViewModel
 
 <h1>AGREGAR PRODUCTOS</h1>
  <table class = "table table-bordered">
@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         
-        @foreach (var p in Model)
+        @foreach (var p in Model.ListadoProducto)
         {
             <tr>
                 <td hidden>@p.IdProducto</td>
