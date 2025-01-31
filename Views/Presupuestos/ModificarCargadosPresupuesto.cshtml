@@ -1,0 +1,46 @@
+@using EspacioProductos
+@model Presupuesto
+
+<h3>MODIFICAR PRODUCTOS SELECCIONADOS (CONTINUAR SI NO HAY SELECCIONADOS)</h3>
+<form class="form" method="post">
+    <section>
+        <input hidden asp-for="@Model.IdPresupuesto">
+    </section>
+    <table class = "table table-bordered">
+        <thead>
+            <tr>
+                <th >ID</th>
+                <th>Descripcion</th>
+                <th>Precio</th>
+                <th>Seleccionar - Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var i = 0;}
+            @foreach (var p in Model.Detalle)
+            {
+                <tr>
+                    <td>@p.Producto.IdProducto</td>
+                    <td>@p.Producto.Descripcion</td>
+                    <td>$ @p.Producto.Precio</td>
+                    <td>
+                        <section class="d-flex">
+                            <section class="mx-2" >
+                                <input type="number" name="listadoProductosSeleccionados[@i].IdProducto" value="@p.Producto.IdProducto">
+                            </section>
+                            <section class="mx-2 contenedor-input-cantidad">
+                                <label for="listadoProductosSeleccionados[@i].Cantidad">Cantidad:</label>
+                                <input type="number" name="listadoProductosSeleccionados[@i].Cantidad" id="listadoProductosSeleccionados[@i].Cantidad" min="1" value="@p.Cantidad">
+                            </section>
+                        </section>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+    <section>
+        <button type="submit" asp-action="ModificarCargadosPresupuesto" asp-controller="Presupuestos" class="btn btn-success my-3">CONTINUAR</button>
+        <a asp-controller="Presupuestos" asp-action="Index" class="btn btn-danger my-3">TERMINAR/SALIR</a>
+    </section>
+</form> 

@@ -49,9 +49,10 @@ namespace EspacioRepositorios
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query = @"INSERT INTO presupuesto (FechaCreacion,id_cliente) VALUES(@FechaCreacion, @id_cliente)";
+                string query = @"INSERT INTO presupuesto (idPresupuesto, FechaCreacion,id_cliente) VALUES(@idPresupuesto,@FechaCreacion, @id_cliente)";
                 using(SqliteCommand command = new SqliteCommand(query,connection))
                 {
+                    command.Parameters.AddWithValue("@idPresupuesto", presupuesto.IdPresupuesto);
                     command.Parameters.AddWithValue("@id_cliente", presupuesto.Cliente.ClienteId);
                     command.Parameters.AddWithValue("@FechaCreacion", DateTime.Now.ToString("yyyy-MM-dd"));
                     command.ExecuteNonQuery();
@@ -102,13 +103,11 @@ namespace EspacioRepositorios
             int id_cliente = 9999999;
             string nombreClienteConsulta="";
             string emailClienteConsulta="";
-            string telefonoClienteConsulta="";
-
             List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
             using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
                 connection.Open();
-                string query1 = @"SELECT idPresupuesto,idProducto, Cantidad FROM presupuesto P
+                string query1 = @"SELECT idProducto, Cantidad FROM presupuesto P
                         INNER JOIN presupuesto_detalle PD USING(idPresupuesto)
                         INNER JOIN cliente C USING(id_cliente)
                         WHERE P.idPresupuesto = @idPresupuesto;";
@@ -123,9 +122,9 @@ namespace EspacioRepositorios
                     {
                         while(reader.Read())
                         {
-                            idPresupuestoConsulta = reader.GetInt32(0);
-                            var productoPresupuesto = productoRepositoryConsulta.GetProducto(reader.GetInt32(1));
-                            int cantidadConsulta = reader.GetInt32(2);
+                            int idProducto = reader.GetInt32(0);
+                            var productoPresupuesto = productoRepositoryConsulta.GetProducto(idProducto);
+                            int cantidadConsulta = reader.GetInt32(1);
                             detalles.Add(new(productoPresupuesto, cantidadConsulta));
                         }
                     }
@@ -133,15 +132,15 @@ namespace EspacioRepositorios
 
                 using(SqliteCommand command2 = new SqliteCommand(query2, connection))
                 {
+                    command2.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);
                     using(SqliteDataReader reader = command2.ExecuteReader())
                     {
-                        command2.Parameters.AddWithValue("@idPresupuesto",idPresupuesto);
                         if(reader.Read())
                         {
                             id_cliente = reader.GetInt32(0);
                             nombreClienteConsulta = reader.GetString(1);
                             emailClienteConsulta = reader.GetString(2);
-                            telefonoClienteConsulta = reader.GetString(3);
+                            string telefonoClienteConsulta = reader.GetString(3);
                             clienteConsulta = new(id_cliente, nombreClienteConsulta, emailClienteConsulta,telefonoClienteConsulta);
                         }else //si no encontro cliente con presupuesto de tal id entonces crea un objeto cliente nulo para poder continuar con la ejecucion
                         {
@@ -153,7 +152,7 @@ namespace EspacioRepositorios
                 connection.Close();
 
             }
-            Presupuesto presupuesto = new Presupuesto(idPresupuestoConsulta, clienteConsulta, detalles);
+            Presupuesto presupuesto = new Presupuesto(idPresupuesto, clienteConsulta, detalles);
             return presupuesto;
         }
 
@@ -203,6 +202,24 @@ namespace EspacioRepositorios
                 connection.Close();
             }
             return listaPresupuesto;
+        }
+
+        public void ModificarProductosYaCargados(int idPresupuesto, int idProducto, int cantidadNueva)
+        {
+            string query = @"UPDATE presupuesto_detalle SET Cantidad = @Cantidad
+                            WHERE idPresupuesto = @idPresupuesto AND idProducto = @idProducto";
+            using(SqliteConnection connection = new SqliteConnection(cadenaConexion))
+            {
+                connection.Open();
+                using(SqliteCommand command = new SqliteCommand(query,connection))
+                    {
+                        command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+                        command.Parameters.AddWithValue("@idProducto", idProducto);
+                        command.Parameters.AddWithValue("@Cantidad", cantidadNueva);
+                        command.ExecuteNonQuery();
+                    }
+                connection.Close();
+            }
         }
     }
 }

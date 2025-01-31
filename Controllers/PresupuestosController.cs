@@ -35,6 +35,7 @@ public class PresupuestosController : Controller
     public IActionResult AltaPresupuesto(int idCliente)
     {
         Cliente clienteAlta = clienteRepository.GetListaCliente().Find(c => c.ClienteId == idCliente);
+        var xdd = presupuestoRepository.GetListaPresupuesto();
         var idNuevoPresupuesto = presupuestoRepository.GetListaPresupuesto().Max(p=>p.IdPresupuesto)+1;
         Presupuesto presupuestoCreado = new (idNuevoPresupuesto,clienteAlta,null);
         presupuestoRepository.AltaPresupuesto(presupuestoCreado);
@@ -67,13 +68,6 @@ public class PresupuestosController : Controller
         }
     }
 
-    // [HttpPost]
-    // public IActionResult AgregarProductoYCantidad(List<int>idProductos, List<int> cantidadProductos)
-    // {
-
-    //         return RedirectToAction("Index");
-    // }
-
     [HttpGet]
     public IActionResult EliminarPresupuestoConfirmar(int idPresupuesto)
     {
@@ -85,12 +79,49 @@ public class PresupuestosController : Controller
             return View("Index");
         }
     }
+
     // [HttpDelete]
     public IActionResult EliminarPresupuestoDefinitivo(int idPresupuesto)
     {
         presupuestoRepository.EliminarPresupuesto(idPresupuesto);
         return RedirectToAction("Index");
     }
+
+    [HttpGet]
+
+    public IActionResult ModificarCargadosPresupuesto(int idPresupuesto)
+    {
+        var presupuesto = presupuestoRepository.GetDetallePresupuesto(idPresupuesto);
+        return View(presupuesto);
+    }
+
+    [HttpPost]
+    public IActionResult ModificarCargadosPresupuesto(List<ModifiacionPresupuestoSeleccionados>listadoProductosSeleccionados, int IdPresupuesto)
+    {
+        if(listadoProductosSeleccionados == null || listadoProductosSeleccionados.Count()==0)
+        {
+            return RedirectToAction("AgregarProducto", new{idPresupuesto = IdPresupuesto});
+        }else
+        {
+            foreach(var x in listadoProductosSeleccionados)
+            {
+                presupuestoRepository.ModificarProductosYaCargados(IdPresupuesto, x.IdProducto, x.Cantidad);
+            }
+            return RedirectToAction("AgregarProductoModificar",new{idPresupuesto = IdPresupuesto}); 
+        }
+    }
+
+    [HttpGet]
+     public IActionResult AgregarProductoModificar(int idPresupuesto)
+    {
+        var productosTotales = productoRepository.GetListaProductos();
+        var presupuesto = presupuestoRepository.GetDetallePresupuesto(idPresupuesto);
+        var productosNoSeleccionados = productosTotales.Where(p => !presupuesto.Detalle.Any(q => q.Producto.IdProducto == p.IdProducto)).ToList();
+        var model = new ProductoViewModel(productosNoSeleccionados,idPresupuesto);
+        return View(model); 
+    }
+
+    
 }
 
 

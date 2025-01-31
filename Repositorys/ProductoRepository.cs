@@ -71,6 +71,7 @@ namespace EspacioRepositorios
             {
                 if(reader.Read())
                 {
+                    producto.IdProducto = Convert.ToInt32(reader["idProducto"]);
                     producto.Descripcion = reader["Descripcion"].ToString();
                     producto.Precio = Convert.ToInt32(reader["Precio"]);
                 }else
