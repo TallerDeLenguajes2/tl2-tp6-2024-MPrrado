@@ -1,5 +1,6 @@
 @using EspacioClientes
 @model Cliente
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
 
 <h1 class="text-center"> ALTA CLIENTE</h1>
 <section class="d-flex justify-content-center">
@@ -7,16 +8,19 @@
         <section class="form-group">
             <label asp-for="@Model.Nombre" class="from-label"></label>
             <input asp-for="@Model.Nombre" class="form-control">
+            <span asp-validation-for="Nombre" class="text-danger"></span>
         </section>
 
         <section class="form-group">
             <label asp-for="@Model.Email" class="from-label"></label>
             <input asp-for="@Model.Email" class="form-control">
+            <span asp-validation-for="Email" class="text-danger"></span>
         </section>
 
         <section class="form-group">
             <label asp-for="@Model.Telefono" class="from-label"></label>
             <input asp-for="@Model.Telefono" class="form-control">
+            <span asp-validation-for="Telefono" class="text-danger"></span>
         </section>
 
         <section class="mt-3">

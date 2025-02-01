@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EspacioClientes
 {
     public class Cliente
@@ -8,8 +10,11 @@ namespace EspacioClientes
         private string telefono;
      
         public int ClienteId { get => clienteId; set => clienteId = value; }
+        [Required(ErrorMessage ="Debe ingresar su nombre")]
         public string Nombre { get => nombre; set => nombre = value; }
+        [EmailAddress(ErrorMessage ="Ingrese un correo electrónico válido")]
         public string Email { get => email; set => email = value; }
+        [Phone(ErrorMessage ="El número de teléfono no es válido")]
         public string Telefono { get => telefono; set => telefono = value; }
         public Cliente(){
 

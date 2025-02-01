@@ -1,5 +1,6 @@
 @using EspacioProductos
 @model Producto
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
 
 <h1 class="text-center"> ALTA PRODUCTO</h1>
 <section class="d-flex justify-content-center">
@@ -12,6 +13,7 @@
         <section>
             <label asp-for="@Model.Precio" class="from-label"></label>
             <input asp-for="@Model.Precio" class="form-control">
+            <span asp-validation-for="Precio" class="text-danger fw-bold"></span>
         </section>
 
         <section class="mt-3">

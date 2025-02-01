@@ -25,8 +25,14 @@ public class ClienteController : Controller
     [HttpPost]
     public IActionResult AltaCliente(Cliente cliente) 
     {
-        repositorioCliente.AltaCliente(cliente);
-        return RedirectToAction("Index");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToAction("AltaCliente");
+        }else
+        {
+            repositorioCliente.AltaCliente(cliente);
+            return RedirectToAction("Index");
+        }
     }
 
     [HttpGet]

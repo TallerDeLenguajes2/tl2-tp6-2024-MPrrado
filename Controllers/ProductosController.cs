@@ -24,8 +24,14 @@ public class ProductosController : Controller
     [HttpPost]
     public IActionResult AltaProducto(Producto producto)
     {
-        productoRepository.AltaProducto(producto);
-        return RedirectToAction("Index");
+        if(!ModelState.IsValid)
+        {
+            return View();
+        }else
+        {
+            productoRepository.AltaProducto(producto);
+            return RedirectToAction("Index");
+        }
     }
 
     [HttpGet]
