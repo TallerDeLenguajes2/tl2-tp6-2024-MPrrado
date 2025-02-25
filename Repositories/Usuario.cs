@@ -1,6 +1,6 @@
 namespace EspacioRepositorios
 {
-    public enum RolUSuario
+    public enum RolUsuario
     {
         Administrador = 1,
         Cliente = 2,
@@ -9,12 +9,12 @@ namespace EspacioRepositorios
     public class Usuario
     {
 
-        public int idUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public string Nombre { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public RolUSuario Rol { get; set; }
-        
+        public RolUsuario Rol { get; set; }
+
         public Usuario()
         {
         }

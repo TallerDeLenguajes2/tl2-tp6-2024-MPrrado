@@ -1,7 +1,7 @@
 using EspacioProductos;
 using EspacioRepositorios;
 using Microsoft.AspNetCore.Mvc;
-public class ProductosController : Controller
+public class ProductosController : AuthController
 {
     private readonly IProductoRepository productoRepository;
 

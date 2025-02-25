@@ -5,7 +5,7 @@ using EspacioRepositorios;
 using EspacioViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-public class PresupuestosController : Controller
+public class PresupuestosController : AuthController
 {
     private readonly IClienteRepository clienteRepository;
     private readonly IPresupuestoRespository presupuestoRespository;

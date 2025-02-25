@@ -2,7 +2,7 @@ using EspacioClientes;
 using EspacioRepositorios;
 using Microsoft.AspNetCore.Mvc;
 
-public class ClienteController : Controller
+public class ClienteController : AuthController
 {
     private readonly IClienteRepository clienteRepository;
 

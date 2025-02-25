@@ -4,7 +4,7 @@ using tl2_tp6_2024_MPrrado.Models;
 
 namespace tl2_tp6_2024_MPrrado.Controllers;
 
-public class HomeController : Controller
+public class HomeController : AuthController
 {
     private readonly ILogger<HomeController> _logger;
 
