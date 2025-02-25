@@ -3,14 +3,6 @@ using Microsoft.Data.Sqlite;
 
 namespace EspacioRepositorios
 {
-    internal interface IProductoRepository
-    {
-        public void AltaProducto(Producto producto);
-        public void ModificarProducto(int idProducto, Producto producto);
-        public List<Producto> GetListaProductos();
-        public Producto GetProducto(int idProducto);
-        public void EliminarProducto(int idProducto);
-    }
     public class ProductoRepository : IProductoRepository
     {
         private static string cadenaDeConexion = "Data Source=db/Tienda.db;Cache=Shared";

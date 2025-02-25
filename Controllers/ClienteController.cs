@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ClienteController : Controller
 {
-    private ClienteRepository repositorioCliente;
-    public ClienteController()
+    private readonly IClienteRepository clienteRepository;
+
+    public ClienteController(IClienteRepository clienteRepository)
     {
-        repositorioCliente = new ClienteRepository();
+        this.clienteRepository = clienteRepository;
     }
 
      [HttpGet]
     public IActionResult Index()
     {
-        return View(repositorioCliente.GetListaCliente());
+        return View(clienteRepository.GetListaCliente());
     }
 
     [HttpGet]
@@ -30,7 +31,7 @@ public class ClienteController : Controller
             return RedirectToAction("AltaCliente");
         }else
         {
-            repositorioCliente.AltaCliente(cliente);
+            clienteRepository.AltaCliente(cliente);
             return RedirectToAction("Index");
         }
     }
@@ -38,9 +39,9 @@ public class ClienteController : Controller
     [HttpGet]
     public IActionResult ModificarCliente(int idCliente)
     {
-        if(repositorioCliente.GetListaCliente().Find(p => p.ClienteId == idCliente)!=null)
+        if(clienteRepository.GetListaCliente().Find(p => p.ClienteId == idCliente)!=null)
         {
-            var cliente = repositorioCliente.GetListaCliente().Find(p => p.ClienteId == idCliente);
+            var cliente = clienteRepository.GetListaCliente().Find(p => p.ClienteId == idCliente);
             return View(cliente);
         }else
         {
@@ -51,13 +52,13 @@ public class ClienteController : Controller
     [HttpPost]
     public IActionResult ModificarCliente(Cliente clienteModificado)
     {
-        repositorioCliente.ModificarCliente(clienteModificado);
+        clienteRepository.ModificarCliente(clienteModificado);
         return RedirectToAction("Index");
     }
 
     public IActionResult EliminarCliente(int idCliente)
     {
-        repositorioCliente.EliminarCliente(idCliente);
+        clienteRepository.EliminarCliente(idCliente);
         return RedirectToAction("Index");
     }
 

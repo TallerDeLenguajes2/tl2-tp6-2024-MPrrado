@@ -3,10 +3,11 @@ using EspacioRepositorios;
 using Microsoft.AspNetCore.Mvc;
 public class ProductosController : Controller
 {
-    private ProductoRepository productoRepository;
-    public ProductosController()
+    private readonly IProductoRepository productoRepository;
+
+    public ProductosController(IProductoRepository productoRepository)
     {
-        productoRepository = new ProductoRepository();
+        this.productoRepository = productoRepository;
     }
 
     [HttpGet]

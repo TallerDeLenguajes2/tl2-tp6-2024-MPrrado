@@ -4,13 +4,6 @@ using SQLitePCL;
 
 namespace EspacioRepositorios
 {
-    internal interface IClienteRepository
-    {
-        public void AltaCliente(Cliente cliente);
-        public List<Cliente> GetListaCliente();
-        public void ModificarCliente(Cliente clienteModificado);
-        public void EliminarCliente(int idCliente);
-    }
     public class ClienteRepository : IClienteRepository
     {
         private static string cadenaConexion = "Data Source=db/Tienda.db;Cache=Shared";
