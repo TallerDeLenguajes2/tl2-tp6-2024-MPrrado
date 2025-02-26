@@ -1,4 +1,4 @@
-namespace EspacioRepositorios
+namespace EspacioModelos
 {
     public enum RolUsuario
     {
@@ -17,6 +17,14 @@ namespace EspacioRepositorios
 
         public Usuario()
         {
+        }
+        public Usuario(int IdUsuario, string Nombre, string UserName, string Password, RolUsuario Rol)
+        {
+            this.IdUsuario = IdUsuario;
+            this.Nombre = Nombre;
+            this.UserName = UserName;
+            this.Password = Password;
+            this.Rol = Rol;
         }
     }
 }
