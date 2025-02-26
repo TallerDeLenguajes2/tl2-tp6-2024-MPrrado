@@ -1,6 +1,6 @@
 using System.Net.Quic;
-using EspacioClientes;
-using EspacioProductos;
+using EspacioModelos;
+using EspacioModelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using SQLitePCL;

@@ -1,6 +1,6 @@
-using EspacioClientes;
+using EspacioModelos;
 
-namespace EspacioProductos
+namespace EspacioModelos
 {
     public class Presupuesto
     {

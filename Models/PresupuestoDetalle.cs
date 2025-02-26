@@ -1,4 +1,4 @@
-namespace EspacioProductos
+namespace EspacioModelos
 {
     public class PresupuestoDetalle
     {

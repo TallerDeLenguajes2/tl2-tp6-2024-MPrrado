@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EspacioClientes
+namespace EspacioModelos
 {
     public class Cliente
     {

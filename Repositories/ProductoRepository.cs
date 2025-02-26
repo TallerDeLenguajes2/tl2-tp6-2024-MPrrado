@@ -1,4 +1,4 @@
-using EspacioProductos;
+using EspacioModelos;
 using Microsoft.Data.Sqlite;
 
 namespace EspacioRepositorios

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Options;
 
-namespace EspacioProductos
+namespace EspacioModelos
 {
     public class Producto
     {

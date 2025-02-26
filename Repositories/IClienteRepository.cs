@@ -1,4 +1,4 @@
-using EspacioClientes;
+using EspacioModelos;
 
 namespace EspacioRepositorios
 {

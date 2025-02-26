@@ -1,3 +1,5 @@
+using EspacioModelos;
+
 namespace EspacioRepositorios
 {
     public interface IUsuarioRepository
@@ -8,5 +10,7 @@ namespace EspacioRepositorios
         public Usuario GetUsuarioPorNombreUsuario(string nombreUsuario);
         public List<Usuario> GetListadoUsuarios();
         public void EliminarUsuario(int idUsuario);
+        public string EncriptarPassword(string password);
+        public bool ComprobarPassword(string passwordIngresada, string passwordDb);
     }
 }
