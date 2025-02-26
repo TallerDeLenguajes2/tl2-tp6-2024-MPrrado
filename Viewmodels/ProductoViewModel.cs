@@ -1,4 +1,4 @@
-using EspacioProductos;
+using EspacioModelos;
 
 namespace EspacioViewModels
 {

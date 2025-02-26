@@ -1,4 +1,4 @@
-using EspacioClientes;
+using EspacioModelos;
 using EspacioRepositorios;
 
 namespace EspacioViewModels

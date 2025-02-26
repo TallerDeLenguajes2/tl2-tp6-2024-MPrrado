@@ -1,0 +1,35 @@
+@using EspacioViewModels
+@model LoginViewModel
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
+
+<!-- Mostrar mensaje de error si existe -->
+@if (!string.IsNullOrEmpty(Model.MensajeError))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.MensajeError
+    </div>
+}
+<section class="d-flex justify-content-center w-auto ">
+    <form asp-controller ="Usuario" asp-action="AltaUsuario" method="post" class="form col-5 p-4 border border-secondary  rounded">
+        <section class="form-group">
+            <legend class="text-center fw-bold bg-dark rounded-pill p-2 text-white"> Iniciar Sesion</legend>
+        </section>
+        <section class="form-group text-center">
+            <label class="form-label fw-bold " for="nombreUsuario">Nombre Usuario:</label>
+            <input class="form-control border-dark rounded-pill" asp-for="@Model.NombreUsuario" id="nombreUsuario"  required>
+            @* <span class="text-danger fw-bold" asp-validation-for="Nombre"></span> *@
+        </section>
+        <section class="form-group text-center">
+            <label class="form-label fw-bold " for="password">Contraseña:</label>
+            <input class="form-control rounded-pill border-dark" asp-for="@Model.Password" id="password" required type="password">
+            @* <span class="text-danger fw-bold" asp-validation-for="Password"></span> *@
+        </section>
+
+        @* <section class="form-group" hidden>
+            <input class="form-control rounded-pill" asp-for="Rol" name="Rol" value="@RolUsuario.Operador">
+        </section> *@
+        <section class="form-group my-4 text-center">
+            <button type="submit" class="btn btn-success text-center fw-bold rounded-pill" asp-controller="Login" asp-action="Login">Iniciar Sesion</button>
+        </section>
+    </form>
+</section>
