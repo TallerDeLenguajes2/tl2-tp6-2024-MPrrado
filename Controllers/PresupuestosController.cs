@@ -1,9 +1,10 @@
 using System.Net.Mail;
-using EspacioClientes;
-using EspacioProductos;
+using EspacioModelos;
+using EspacioModelos;
 using EspacioRepositorios;
 using EspacioViewModels;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 public class PresupuestosController : AuthController
 {
@@ -22,12 +23,16 @@ public class PresupuestosController : AuthController
     [HttpGet]
     public IActionResult Index()
     {
-        return View(presupuestoRespository.GetListaPresupuesto());
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        ListarPresupuestosViewModel modelo = new(presupuestoRespository.GetListaPresupuesto(), GetRolUsuarioLogueado());
+        return View(modelo);
     }
 
     [HttpGet]
     public IActionResult AltaPresupuesto()
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         var model = new PresupuestoViewModel(clienteRepository.GetListaCliente());
         return View(model);
     }
@@ -35,6 +40,8 @@ public class PresupuestosController : AuthController
     [HttpPost]
     public IActionResult AltaPresupuesto(int idCliente)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         Cliente clienteAlta = clienteRepository.GetListaCliente().Find(c => c.ClienteId == idCliente);
         var xdd = presupuestoRespository.GetListaPresupuesto();
         var idNuevoPresupuesto = presupuestoRespository.GetListaPresupuesto().Max(p=>p.IdPresupuesto)+1;
@@ -46,6 +53,8 @@ public class PresupuestosController : AuthController
     [HttpGet]
     public IActionResult AgregarProducto(int idPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         var model = new ProductoViewModel(productoRepository.GetListaProductos(),idPresupuesto);
         return View(model); 
     }
@@ -53,6 +62,8 @@ public class PresupuestosController : AuthController
     [HttpPost]
     public IActionResult AgregarProductoYCantidad(List<ProductoSeleccionadoViewModel>listadoProductos, int IdPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         if(listadoProductos == null || listadoProductos.Count()==0) //controlamos que no llegue vacia la eleccion de productos para el presupuesto
         {
             return RedirectToAction("AgregarProducto", new{idPresupuesto = IdPresupuesto});
@@ -72,6 +83,8 @@ public class PresupuestosController : AuthController
     [HttpGet]
     public IActionResult EliminarPresupuestoConfirmar(int idPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         if(presupuestoRespository.GetListaPresupuesto().Find(p => p.IdPresupuesto == idPresupuesto) != null)
         {
             return View(presupuestoRespository.GetListaPresupuesto().Find(p => p.IdPresupuesto == idPresupuesto));
@@ -84,6 +97,8 @@ public class PresupuestosController : AuthController
     // [HttpDelete]
     public IActionResult EliminarPresupuestoDefinitivo(int idPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         presupuestoRespository.EliminarPresupuesto(idPresupuesto);
         return RedirectToAction("Index");
     }
@@ -92,6 +107,8 @@ public class PresupuestosController : AuthController
 
     public IActionResult ModificarCargadosPresupuesto(int idPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         var presupuesto = presupuestoRespository.GetDetallePresupuesto(idPresupuesto);
         return View(presupuesto);
     }
@@ -99,6 +116,8 @@ public class PresupuestosController : AuthController
     [HttpPost]
     public IActionResult ModificarCargadosPresupuesto(List<ModifiacionPresupuestoSeleccionados>listadoProductosSeleccionados, int IdPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         if(listadoProductosSeleccionados == null || listadoProductosSeleccionados.Count()==0)
         {
             return RedirectToAction("AgregarProducto", new{idPresupuesto = IdPresupuesto});
@@ -113,8 +132,10 @@ public class PresupuestosController : AuthController
     }
 
     [HttpGet]
-     public IActionResult AgregarProductoModificar(int idPresupuesto)
+    public IActionResult AgregarProductoModificar(int idPresupuesto)
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         var productosTotales = productoRepository.GetListaProductos();
         var presupuesto = presupuestoRespository.GetDetallePresupuesto(idPresupuesto);
         var productosNoSeleccionados = productosTotales.Where(p => !presupuesto.Detalle.Any(q => q.Producto.IdProducto == p.IdProducto)).ToList();

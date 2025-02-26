@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using EspacioModelos;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp6_2024_MPrrado.Models;
 
@@ -15,11 +16,15 @@ public class HomeController : AuthController
 
     public IActionResult Index()
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         return View();
     }
 
     public IActionResult Privacy()
     {
+        if(!IsAuthenticated())return RedirectToAction("Index", "Login");
+        if(GetRolUsuarioLogueado() != RolUsuario.Administrador) return RedirectToAction("Index", "Presupuestos");
         return View();
     }
 

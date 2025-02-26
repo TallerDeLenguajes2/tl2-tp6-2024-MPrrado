@@ -1,3 +1,4 @@
+using EspacioModelos;
 using EspacioRepositorios;
 using EspacioViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +31,9 @@ namespace EspacioController
             }
             else
             {
-                return RedirectToAction("Index", "Tablero");
+                return RedirectToAction("Index", "Productos");
             }
-            }
+        }
         [HttpPost]
         public IActionResult Login(LoginViewModel modelo)
         {
@@ -51,7 +52,7 @@ namespace EspacioController
             }
             else
             {
-                if (!usuarioRepository.(modelo.Password, usuario.Password))
+                if (!usuarioRepository.ComprobarPassword(modelo.Password, usuario.Password))
                 {
                     modelo.MensajeError = "ERROR: Usuario o contraseña incorrectos";
                     return View("Index", modelo);
@@ -62,7 +63,7 @@ namespace EspacioController
             HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
             HttpContext.Session.SetString("IsLoged", "true");
             HttpContext.Session.SetString("UserName", usuario.Nombre);
-            return RedirectToAction("Index", "Tablero");
+            return RedirectToAction("Index", "Presupuestos");
         }
 
         [HttpGet]
